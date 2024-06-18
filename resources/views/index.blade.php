@@ -114,13 +114,19 @@
                             `);
                         });
 
-                        $('#pagination').html(response.links);
+                        $('#pagination').html(response.links); 
+                        $('#pagination a').on('click', function(e) {
+                            e.preventDefault();
+                            var page = $(this).attr('href').split('page=')[1];
+                            currentPage = page;
+                            fetchOrders(page, $('#search').val());
+                        });
                     }
                 });
             }
 
             fetchOrders();
-
+            
             $('#add-order').on('click', function() {
                 $('#modal-title').text('Add Order');
                 $('#order-id').val('');
@@ -131,10 +137,12 @@
                 $('#quantity').val('');
                 $('#price').val('');
                 $('#order-modal').removeClass('hidden');
+                $('#pagination').addClass('hidden'); 
             });
 
             $('#cancel-order').on('click', function() {
                 $('#order-modal').addClass('hidden');
+                $('#pagination').removeClass('hidden');
             });
 
             $('#save-order').on('click', function() {
@@ -179,6 +187,7 @@
                         $('#quantity').val(response.quantity);
                         $('#price').val(response.price);
                         $('#order-modal').removeClass('hidden');
+                        $('#pagination').addClass('hidden');
                     }
                 });
             });
@@ -195,13 +204,6 @@
                         fetchOrders(currentPage);
                     }
                 });
-            });
-
-            $(document).on('click', '.pagination a', function(e) {
-                e.preventDefault();
-                var page = $(this).attr('href').split('page=')[1];
-                currentPage = page;
-                fetchOrders(page, $('#search').val());
             });
 
             $('#search').on('keyup', function() {

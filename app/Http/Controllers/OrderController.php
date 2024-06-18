@@ -23,9 +23,10 @@ class OrderController extends Controller
                 ->orWhere('quantity', 'like', '%' . $search . '%')
                 ->orWhere('total', 'like', '%' . $search . '%');
         })->paginate(10);
-
-        return response()->json($orders);
-        return response()->json($orders);
+        return response()->json([
+            'data' => $orders->items(),
+            'links' => (string) $orders->links(),
+        ]);
     }
 
     public function store(Request $request)
